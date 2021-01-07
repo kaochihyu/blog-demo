@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/kaochihyu/blog-demo/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/kaochihyu/blog-demo/static/js/main.9081dae8.chunk.js",
+    "main.js.map": "/kaochihyu/blog-demo/static/js/main.9081dae8.chunk.js.map",
+    "runtime-main.js": "/kaochihyu/blog-demo/static/js/runtime-main.57fb837b.js",
+    "runtime-main.js.map": "/kaochihyu/blog-demo/static/js/runtime-main.57fb837b.js.map",
+    "static/js/2.246f4602.chunk.js": "/kaochihyu/blog-demo/static/js/2.246f4602.chunk.js",
+    "static/js/2.246f4602.chunk.js.map": "/kaochihyu/blog-demo/static/js/2.246f4602.chunk.js.map",
+    "index.html": "/kaochihyu/blog-demo/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/kaochihyu/blog-demo/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.246f4602.chunk.js.LICENSE.txt": "/kaochihyu/blog-demo/static/js/2.246f4602.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.57fb837b.js",
+    "static/js/2.246f4602.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.9081dae8.chunk.js"
+  ]
+}
