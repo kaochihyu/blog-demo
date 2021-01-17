@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getAuthToken } from '../../utils';
 import { newPost } from '../../redux/reducers/postReducer';
 
@@ -10,8 +10,7 @@ const Root = styled.div`
 `;
 
 const PostContainer = styled.form`
-  width: 70%;
-  height: 80px;
+  max-width: 900px;
 `;
 
 const PostTitle = styled.div`
@@ -20,7 +19,7 @@ const PostTitle = styled.div`
   color: rgba(0, 0, 0, 0.8);
   text-decoration: none;
   & input {
-    width: 60%;
+    width: 100%;
     height: 30px;
   }
 `;
@@ -59,7 +58,6 @@ function Post() {
   const token = getAuthToken();
   const history = useHistory();
   const dispatch = useDispatch();
-  const newPostResponse = useSelector((store) => store.posts.newPostResponse)
 
   const handleSubmit = () => {
     setErrorMessage(null);
@@ -67,14 +65,11 @@ function Post() {
       if (!title || !body) {
         setErrorMessage('Please fill the empty area.');
       } else {
-        dispatch(newPost(
-          title, 
-          body
-        )).then(newPostResponse => {
+        dispatch(newPost(title, body)).then((newPostResponse) => {
           if (newPostResponse && newPostResponse.id) {
-            history.push("/posts/" + newPostResponse.id)
+            history.push('/posts/' + newPostResponse.id);
           }
-        })
+        });
       }
     }
   };
@@ -83,7 +78,7 @@ function Post() {
     <PostContainer onSubmit={handleSubmit}>
       <PostTitle>
         Title：
-        {''}
+        {""}
         <input value={title} onChange={e => setTitle(e.target.value)} />
       </PostTitle>
       <PostContent>New Post： </PostContent>

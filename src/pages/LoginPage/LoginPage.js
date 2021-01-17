@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { login, getMe } from '../../WebAPI';
-import { setAuthToken } from '../../utils';
-import AuthContext from '../../contexts';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../redux/reducers/userReducer';
 
 const Form = styled.form`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -11,9 +10,8 @@ const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 500px;
+  max-width: 500px;
   height: 400px;
-  margin: 50px;
 `;
 
 const Title = styled.div`
@@ -43,43 +41,31 @@ const ErrorMessage = styled.div`
 `;
 
 export default function LoginPage() {
-  const { setUser } = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const errorMessage = useSelector(store => store.users.errorMessage)
 
   const handleSubmit = () => {
-    setErrorMessage(null);
-    login(username, password).then((data) => {
-      if (data.ok === 0) {
-        return setErrorMessage(data.message);
+    dispatch(login(username, password)).then((res) => {
+      if (res) {
+        history.push('/')
       }
-      setAuthToken(data.token);
-
-      getMe().then((response) => {
-        if (response.ok !== 1) {
-          setAuthToken(null);
-          return setErrorMessage(response.toString());
-        }
-        setUser(response.data);
-        history.push('/');
-        return null;
-      });
-      return null;
-    });
+    })
   };
+  
   return (
     <Form onSubmit={handleSubmit}>
       <Title>Welcome Back</Title>
       <Username>
-        Username:
-        {''}
+        Username 
+        {' '}
         <input value={username} onChange={e => setUsername(e.target.value)} />
       </Username>
       <Password>
-        Password:
-        {''}
+        Password 
+        {' '}
         <input
           type="password"
           value={password}

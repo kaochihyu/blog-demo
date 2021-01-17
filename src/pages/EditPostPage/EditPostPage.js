@@ -47,47 +47,53 @@ const Button = styled.button`
   display: block;
   float: right;
 `;
+
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 export default function EditPostPage() {
-  const [errorMessage, setErrorMessage] = useState();
   const token = getAuthToken();
   const history = useHistory();
   const dispatch = useDispatch();
   const { id } = useParams();
   const post = useSelector(store => store.posts.post);
-  const editPostResponse = useSelector(store => store.posts.editPostResponse);
+  const [errorMessage, setErrorMessage] = useState();
   const [title, setTitle] = useState(post.title);
   const [body, setBody] = useState(post.body);
 
-
   if (!token) {
     history.push('/');
-  } 
-  
-  console.log(title, body)
+  }
 
   const handleSave = () => {
-    dispatch(editPost(id, title, body))
-    history.push(`/posts/${id}`)
+    if (!title || !body) {
+      setErrorMessage('Please fill the empty area.');
+    } else {
+      dispatch(editPost(id, title, body)).then((res) => {
+        history.push(`/posts/${id}`);
+      });
+    }
   };
 
   useEffect(() => {
-    dispatch(getPost(id))
-  }, []);
+    dispatch(getPost(id));
+  }, [id, dispatch]);
 
   return (
     <Root>
       <PostContainer>
         <PostTitle>
           Title：
-          <input value={title} type="text" onChange={e => setTitle(e.target.value)} />
+          <input
+            value={title}
+            type="text"
+            onChange={e => setTitle(e.target.value)}
+          />
         </PostTitle>
         <PostContent>Post：</PostContent>
-        <Textarea onChange={e => setBody(e.target.value)} >{body}</Textarea>
-        <Button onClick={handleSave} >Save</Button>
+        <Textarea onChange={e => setBody(e.target.value)}>{body}</Textarea>
+        <Button onClick={handleSave}>Save</Button>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </PostContainer>
     </Root>

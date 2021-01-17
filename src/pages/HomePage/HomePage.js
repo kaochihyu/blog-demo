@@ -7,20 +7,21 @@ import { getPosts } from '../../redux/reducers/postReducer';
 
 const Root = styled.div`
   margin: 0px;
-  padding: 0 40px;
   box-sizing: border-box;
 `;
 
 const PostList = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-between;
+  gap: 20px;
   flex-wrap: wrap;
   padding: 0 auto;
 `;
 
 const PostContainer = styled.div`
-  width: calc((100% - 120px) / 3);
-  height: 100px;
+  flex: 1 1 auto;
+  min-width: 300px;
   align-items: flex-end;
   margin: 20px;
   border-bottom: solid 1px rgba(0, 0, 0, 0.3);
@@ -43,14 +44,16 @@ const PostDate = styled.div`
 `;
 
 const Banner = styled.div`
-  top: -30px;
+  width: 100%;
   background-color: #fff;
-  padding: 50px 40px;
+  padding: 50px 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
   margin-bottom: 40px;
 `;
+
 const BannerTitle = styled.div`
+  width: 100%;
   color: color: rgba(0, 0, 0, 0.8);
   font-size: 72px;
   letter-spacing: -1px;
@@ -61,7 +64,7 @@ const BannerContent = styled.div`
   color: color: rgba(0, 0, 0, 0.8);
   margin-top: 40px;
   font-size: 20px;
-  width: 40%;
+  max-width: 600px;
 `;
 
 const Pagination = styled.div`
@@ -84,8 +87,9 @@ const PageButton = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 20px;
-  ${props => props.prev
-    && `
+  ${(props) =>
+    props.prev &&
+    `
       border-radius: 0px;
       border: none;
       transition: 0.5s;
@@ -101,9 +105,7 @@ const PageButton = styled.div`
 function Post({ post }) {
   return (
     <PostContainer>
-      <PostTitle to={`/posts/${post.id}`}>
-        {post.title}
-      </PostTitle>
+      <PostTitle to={`/posts/${post.id}`}>{post.title}</PostTitle>
       <PostDate>{new Date(post.createdAt).toLocaleString()}</PostDate>
     </PostContainer>
   );
@@ -116,7 +118,7 @@ Post.propTypes = {
 export default function HomePage() {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-  const posts = useSelector(store => store.posts.posts)
+  const posts = useSelector((store) => store.posts.posts);
 
   const handlePrevClick = () => {
     setPage(page - 1);
@@ -149,15 +151,13 @@ export default function HomePage() {
         ))}
       </PostList>
       <Pagination>
-        {page !== 1
-          && (
+        {page !== 1 && (
           <PageButton prev onClick={handlePrevClick}>
             Prev
           </PageButton>
         )}
         <PageButton>{page}</PageButton>
-        {posts.length === 6
-          && (
+        {posts.length === 6 && (
           <PageButton prev onClick={handleNextClick}>
             Next
           </PageButton>

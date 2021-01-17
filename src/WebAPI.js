@@ -6,8 +6,7 @@ export const getPostsAPI = (page) => fetch(`${BASE_URL}/posts?_page=${page}&_lim
 
 export const getPostAPI = (postId) => fetch(`${BASE_URL}/posts/${postId}`).then(res => res.json());
 
- 
-export const login = (username, password) => fetch(`${BASE_URL}/login`, {
+export const loginAPI = (username, password) => fetch(`${BASE_URL}/login`, {
   method: 'POST',
   headers: {
     'content-type': 'application/json',
@@ -18,7 +17,7 @@ export const login = (username, password) => fetch(`${BASE_URL}/login`, {
   }),
 }).then(res => res.json());
 
-export const register = (nickname, username, password) => fetch(`${BASE_URL}/register`, {
+export const registerAPI = (nickname, username, password) => fetch(`${BASE_URL}/register`, {
   method: 'POST',
   headers: {
     'content-type': 'application/json',

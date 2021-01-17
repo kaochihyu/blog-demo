@@ -1,22 +1,29 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link, useLocation, useHistory } from 'react-router-dom';
-import AuthContext from '../../contexts';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../redux/reducers/userReducer';
 import { setAuthToken } from '../../utils';
 
 const HeaderContainer = styled.div`
   height: 100px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 0px 70px;
+  padding: 0 40px;
   background-color: #fff;
   box-sizing: border-box;
+  ${({ theme }) => theme.media.sm} {
+    padding: 0 20px;
+    justify-content: center;
+    height: 140px;
+  }
 `;
 
 const Brand = styled(Link)`
@@ -60,11 +67,12 @@ const Nav = styled(Link)`
 export default function Header() {
   const location = useLocation();
   const history = useHistory();
-  const { user, setUser } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const user = useSelector(store => store.users.user)
 
   const handleLogout = () => {
     setAuthToken('');
-    setUser(null);
+    dispatch(setUser(''))
     if (location.pathname !== '/') {
       history.push('/');
     }

@@ -7,21 +7,22 @@ import { getPost, deletePost, editPost } from '../../redux/reducers/postReducer'
 import { removePost } from '../../WebAPI'
 
 const Root = styled.div`
-  padding: 70px;
 `;
 
 const PostContainer = styled.div`
-  width: 70%;
-  height: 80px;
+  max-width: 900px;
+  padding: 20px;
   align-items: flex-end;
-  justify-content: space-between;
+  word-break: break-all;
 `;
 
 const TitleArea = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 `
 const PostTitle = styled.div`
+  width: 100%;
   font-size: 24px;
   padding: 10px 0;
   font-weight: 600;
@@ -35,6 +36,7 @@ const PostDate = styled.div`
 `;
 
 const PostContent = styled.div`
+  width: 100%;
   margin-top: 20px;
   line-height: 1.5;
 `;
@@ -42,6 +44,9 @@ const PostContent = styled.div`
 const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
+  ${({ theme }) => theme.media.sm} {
+    justify-content: center;
+  }
 `
 
 const Button = styled.button`
@@ -64,20 +69,23 @@ const DeleteButton = styled(Button)`
   border: none;
 `
 
-function Post({ post, onDelete, onEdit }) {
+function Post({ post, user, onDelete, onEdit }) {
   if (!post) return null;
   return (
     <PostContainer>
-      <TitleArea>
-        <PostTitle>{post.title}</PostTitle>
+      {user && user.id === post.userId && (
         <Buttons>
           <Button onClick={onEdit}>編輯</Button>
           <DeleteButton onClick={onDelete}>刪除</DeleteButton>
         </Buttons>
+      )}
+      <TitleArea>
+        <div>
+          <PostTitle>{post.title}</PostTitle>
+          <PostDate>{new Date(post.createdAt).toLocaleString()}</PostDate>
+        </div>
       </TitleArea>
-      <PostDate>{new Date(post.createdAt).toLocaleString()}</PostDate>
       <PostContent>{post.body}</PostContent>
-      
     </PostContainer>
   );
 }
@@ -93,6 +101,8 @@ export default function PostPage() {
   const isLoading = useSelector(store => store.posts.isLoadingPost);
   const post = useSelector(store => store.posts.post)
   const editPostResponse = useSelector(store => store.posts.editPostResponse);
+  const isLoadingPost = useSelector(store => store.posts.isLoadingPost)
+  const user = useSelector(store => store.users.user)
 
   const handleDelete = () => {
     dispatch(deletePost(id)).then(() => {
@@ -106,12 +116,11 @@ export default function PostPage() {
 
   useEffect(() => {
     dispatch(getPost(id))
-  }, [id, dispatch, editPostResponse]); // dispatch 為甚麼要加入 dependency
-
+  }, [id, dispatch]); // dispatch 為甚麼要加入 dependency
 
   return (
     <Root>
-      <Post post={post} onDelete={handleDelete} onEdit={handleEdit}/>
+      <Post post={post} user={user} onDelete={handleDelete} onEdit={handleEdit}/>
     </Root>
   );
 }
